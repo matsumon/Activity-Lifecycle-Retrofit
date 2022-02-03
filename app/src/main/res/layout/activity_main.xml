@@ -1,14 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<!--FrameLayout copied directly from Hess github https://github.com/osu-cs492-w22/MultiActivityGitHubSearch/blob/main/app/src/main/res/layout/activity_main.xml-->
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_forecast_list"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_forecast_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+<!--    TextView copied directly from https://github.com/osu-cs492-w22/MultiActivityGitHubSearch/blob/main/app/src/main/res/layout/activity_main.xml-->
+    <TextView
+        android:id="@+id/tv_search_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textAppearance="?attr/textAppearanceBody1"
+        android:textColor="?attr/colorError"
+        android:visibility="invisible"
+        android:text="ERROR, Most likely couldn't connect with OpenWeather API" />
+<!--CircularProgressIndiicator copied directly from https://github.com/osu-cs492-w22/MultiActivityGitHubSearch/blob/main/app/src/main/res/layout/activity_main.xml-->
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/loading_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:layout_marginTop="32dp"
+        android:layout_gravity="top|center_horizontal"
+        android:visibility="invisible" />
+</FrameLayout>

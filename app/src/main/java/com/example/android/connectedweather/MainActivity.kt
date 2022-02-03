@@ -9,11 +9,14 @@ import com.android.volley.RequestQueue
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import android.util.Log
+import android.widget.TextView
 import com.example.android.connectedweather.data.forecast
 import com.example.android.connectedweather.data.overview
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import android.view.View
 
 class MainActivity : AppCompatActivity() {
     private var forecastDataItems: List<forecast?> = listOf()
@@ -24,12 +27,15 @@ class MainActivity : AppCompatActivity() {
         .build()
     val jsonAdapter: JsonAdapter<overview> =
             moshi.adapter(overview::class.java)
-
+    private lateinit var errorState: TextView
+    private lateinit var loadingState: CircularProgressIndicator
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         requestQueue = Volley.newRequestQueue(this)
+        loadingState = findViewById(R.id.loading_indicator)
+        loadingState.visibility = View.VISIBLE
         volleyRequest()
         forecastListRV = findViewById<RecyclerView>(R.id.rv_forecast_list)
         forecastListRV.layoutManager = LinearLayoutManager(this)
@@ -48,10 +54,13 @@ class MainActivity : AppCompatActivity() {
                 val date = results?.list?.elementAt(0)?.date
                 Log.d("orange","$date")
                 forecastListRV.adapter = ForecastAdapter((results?.list ?: listOf()))
-
+                loadingState.visibility = View.INVISIBLE
             },
             {
                 Log.d("orange","ERROR HERE $it")
+                errorState = findViewById<TextView>(R.id.tv_search_error)
+                errorState.visibility = View.VISIBLE
+                loadingState.visibility = View.INVISIBLE
             }
         )
         requestQueue.add(req)
