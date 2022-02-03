@@ -36,7 +36,6 @@ class ForecastAdapter(var forecastPeriods: List<forecast?>) :
         private val dayTV: TextView = view.findViewById(R.id.tv_day)
         private val highTempTV: TextView = view.findViewById(R.id.tv_high_temp)
         private val lowTempTV: TextView = view.findViewById(R.id.tv_low_temp)
-//        private val shortDescTV: TextView = view.findViewById(R.id.tv_short_description)
         private val shortDescTV: String =""
         private val popTV: TextView = view.findViewById(R.id.tv_pop)
         private val image: ImageView = view.findViewById(R.id.image)
@@ -58,40 +57,33 @@ class ForecastAdapter(var forecastPeriods: List<forecast?>) :
             }
             currentForecastPeriod = forecastPeriod
 
-//            val cal = Calendar.getInstance()
-//            cal.set(forecastPeriod.year, forecastPeriod.month, forecastPeriod.day)
-//
-//            monthTV.text = cal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault())
-//            dayTV.text = cal.get(Calendar.DAY_OF_MONTH).toString()
-//            highTempTV.text = forecastPeriod.highTemp.toString() + "°F"
-//            lowTempTV.text = forecastPeriod.lowTemp.toString() + "°F"
-            monthTV.text = "AUG"
-            dayTV.text = "10"
+            val time = getDateTime(forecastPeriod.date.toString())
+            monthTV.text = time?.monthDay
+            dayTV.text = time?.time
             highTempTV.text = "${forecastPeriod.main.highTemp}°F"
             lowTempTV.text = "${forecastPeriod.main.lowTemp} °F"
 
             Log.d("blue","HERE $forecastPeriod")
             var rain = forecastPeriod.rain
-
             rain = rain * 100
-
             popTV.text = "\uD83C\uDF02" + rain.toString() + "%"
-//            shortDescTV.text = forecastPeriod.shortDesc
+
 //            Picasso.get().setLoggingEnabled(true)
-            Picasso.get().load("http://openweathermap.org/img/wn/10n@2x.png").into(image)
-            val time = getDateTime(forecastPeriod.date.toString())
-            Log.d("orange","${time?.monthDay}")
+            Picasso.get().load("http://openweathermap.org/img/wn/${forecastPeriod.weather[0].icon}@2x.png").into(image)
+
+            Log.d("orange","MONTHDAY ${time?.monthDay}")
+            Log.d("orange","TIME ${time?.time}")
         }
-//        COPIED Part of FUNCTION FROM https://www.codegrepper.com/code-examples/java/convert+timestamp+to+date+android to get time
+//        Copied portion of the code from https://stackoverflow.com/questions/47250263/kotlin-convert-timestamp-to-datetime
          fun getDateTime(s: String): dateObject? {
-                val Timestamp: Long = 1633304782
-//                val Timestamp: Long = s.toLong()
-                val timeD = Date(Timestamp * 1000)
-                val sdf = SimpleDateFormat("HH:mm:ss")
-                val Time = sdf.format(timeD)
+             val sdf = SimpleDateFormat("MMM d")
+             val time = SimpleDateFormat("h:mm a")
+             val netDate = Date(s.toLong() * 1000)
+             val monthDay = sdf.format(netDate)
+             val Time = time.format(netDate)
                 var orange:dateObject = dateObject(
-                        monthDay="july 5",
-                        time="12:123am"
+                        monthDay=monthDay,
+                        time=Time
                     )
                 return orange
         }
