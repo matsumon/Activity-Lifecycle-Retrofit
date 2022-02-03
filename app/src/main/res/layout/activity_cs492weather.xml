@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".cs492weather">
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="20dp"
+        android:layout_gravity="center" />
+    <TextView
+        android:id="@+id/city"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/image"
+        android:gravity="center"
+        android:text="Corvallis"
+        android:textColor="#808080"
+        android:textSize="60dp" />
+    <TextView
+        android:id="@+id/datetime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/city"
+        android:gravity="center"
+        android:text="Feb 6, 1:00 pm"
+        android:textAppearance="?attr/textAppearanceBody1"/>
+    <TextView
+        android:id="@+id/low_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.CS492Weather.LowTemp"
+        android:textSize="30dp"
+        android:paddingLeft="50dp"
+        app:layout_constraintTop_toBottomOf="@id/datetime"
+        android:text="🥶 45°F"/>
+    <TextView
+        android:id="@+id/high_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.CS492Weather.HighTemp"
+        android:textSize="30dp"
+        app:layout_constraintTop_toBottomOf="@id/datetime"
+        app:layout_constraintLeft_toRightOf="@id/low_temp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="🌡️45°F"/>
+    <TextView
+        android:id="@+id/barrier1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/low_temp"/>
+
+    <TextView
+        android:id="@+id/rain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🌂100%"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:paddingTop="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="40dp"
+        app:layout_constraintTop_toBottomOf="@id/barrier1"/>
+
+    <TextView
+        android:id="@+id/cloud"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/barrier1"
+        app:layout_constraintLeft_toRightOf="@id/rain"
+        app:layout_constraintRight_toLeftOf="@id/wind"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        android:paddingTop="10dp"
+        android:paddingLeft="30dp"
+        android:text="&#x2601;100%"/>
+    <TextView
+        android:id="@+id/wind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/barrier1"
+        app:layout_constraintLeft_toRightOf="@id/cloud"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        android:paddingTop="10dp"
+        android:paddingLeft="50dp"
+        android:paddingRight="10dp"
+        android:text="💨88mph⛛"/>
+
+    <TextView
+        android:id="@+id/barrier2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/rain"/>
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/barrier2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="center"
+        android:text="Light Rain"
+        android:textColor="#808080"
+        android:textSize="40dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>
