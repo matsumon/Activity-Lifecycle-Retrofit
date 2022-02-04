@@ -60,6 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?attr/textAppearanceBody1"
+            app:drawableStartCompat="@drawable/ic_baseline_umbrella_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_high_temp"
             app:layout_constraintStart_toEndOf="@id/tv_low_temp"

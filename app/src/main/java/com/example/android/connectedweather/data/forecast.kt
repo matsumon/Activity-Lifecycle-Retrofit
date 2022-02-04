@@ -6,5 +6,7 @@ data class forecast(
     @Json(name="dt") var date: Long,
     var main: main,
     var weather: List<weather>,
-    @Json(name="pop") var rain: Float
+    @Json(name="pop") var rain: Float,
+    var clouds: clouds,
+    var wind: wind
 )

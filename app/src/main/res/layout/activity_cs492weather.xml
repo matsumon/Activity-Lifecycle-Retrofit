@@ -58,13 +58,14 @@
         android:id="@+id/rain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="🌂100%"
+        android:text="100%"
+        app:drawableStartCompat="@drawable/ic_baseline_umbrella_24"
         android:textColor="@color/black"
         android:textSize="20dp"
         android:textStyle="bold"
         android:paddingTop="10dp"
         android:paddingLeft="20dp"
-        android:paddingRight="40dp"
+
         app:layout_constraintTop_toBottomOf="@id/barrier1"/>
 
     <TextView
@@ -74,6 +75,7 @@
         app:layout_constraintTop_toBottomOf="@id/barrier1"
         app:layout_constraintLeft_toRightOf="@id/rain"
         app:layout_constraintRight_toLeftOf="@id/wind"
+        app:drawableStartCompat="@drawable/ic_baseline_cloud_queue_24"
         android:textStyle="bold"
         android:textSize="20dp"
         android:textColor="@color/black"
@@ -91,7 +93,6 @@
         android:textSize="20dp"
         android:textColor="@color/black"
         android:paddingTop="10dp"
-        android:paddingLeft="50dp"
         android:paddingRight="10dp"
         android:text="💨88mph⛛"/>
 

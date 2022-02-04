@@ -11,12 +11,14 @@ import com.android.volley.toolbox.Volley
 import android.util.Log
 import android.widget.TextView
 import com.example.android.connectedweather.data.forecast
+import com.example.android.connectedweather.data.forecast_all
 import com.example.android.connectedweather.data.overview
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import android.view.View
+import android.content.Intent
 
 class MainActivity : AppCompatActivity() {
     private var forecastDataItems: List<forecast?> = listOf()
@@ -39,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         volleyRequest()
         forecastListRV = findViewById<RecyclerView>(R.id.rv_forecast_list)
         forecastListRV.layoutManager = LinearLayoutManager(this)
-        forecastListRV.adapter = ForecastAdapter(forecastDataItems)
+        forecastListRV.adapter = ForecastAdapter(forecastDataItems,::activityHandler)
     }
 
     fun volleyRequest(): Unit{
@@ -53,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d("orange","SUCCESS HERE $results")
                 val date = results?.list?.elementAt(0)?.date
                 Log.d("orange","$date")
-                forecastListRV.adapter = ForecastAdapter((results?.list ?: listOf()))
+                forecastListRV.adapter = ForecastAdapter((results?.list ?: listOf()),::activityHandler)
                 loadingState.visibility = View.INVISIBLE
             },
             {
@@ -64,6 +66,19 @@ class MainActivity : AppCompatActivity() {
             }
         )
         requestQueue.add(req)
+    }
+    fun activityHandler(item: forecast_all){
+        val intent = Intent(this,cs492weather::class.java)
+        intent.putExtra("datetime",item.datetime)
+        intent.putExtra("wind",item.wind)
+        intent.putExtra("cloud",item.cloud)
+        intent.putExtra("rain",item.rain)
+        intent.putExtra("image",item.image)
+        intent.putExtra("highTemp",item.highTemp)
+        intent.putExtra("lowTemp",item.lowTemp)
+        intent.putExtra("description",item.description)
+
+        startActivity(intent)
     }
 
 }
