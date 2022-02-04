@@ -19,6 +19,9 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import android.view.View
 import android.content.Intent
+import android.net.Uri
+import android.view.Menu
+import android.view.MenuItem
 
 class MainActivity : AppCompatActivity() {
     private var forecastDataItems: List<forecast?> = listOf()
@@ -80,5 +83,20 @@ class MainActivity : AppCompatActivity() {
 
         startActivity(intent)
     }
-
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.map ->{
+                Log.d("blue","MAP")
+                val uri = Uri.parse("geo:44.5646,-123.2620")
+                val intent: Intent = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(intent)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 }

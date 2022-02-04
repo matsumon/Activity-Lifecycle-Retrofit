@@ -3,23 +3,35 @@ package com.example.android.connectedweather
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import com.squareup.picasso.Picasso
+import android.net.Uri
+import android.content.Intent
 
 class cs492weather : AppCompatActivity() {
+    var wind: String? =""
+    var datetime: String? =""
+    var cloud: String? =""
+    var rain: String? =""
+    var highTemp: String? =""
+    var lowTemp: String? =""
+    var description: String? =""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cs492weather)
 
-        var datetime=intent.getStringExtra("datetime")
-        var wind=intent.getStringExtra("wind")
-        var cloud= intent.getStringExtra("cloud")
-        var rain=intent.getStringExtra("rain")
+         datetime=intent.getStringExtra("datetime")
+         wind=intent.getStringExtra("wind")
+         cloud= intent.getStringExtra("cloud")
+         rain=intent.getStringExtra("rain")
         var icon= intent.getStringExtra("image")
-        var highTemp= intent.getStringExtra("highTemp")
-        var lowTemp= intent.getStringExtra("lowTemp")
-        var description=intent.getStringExtra("description")
+        highTemp=intent.getStringExtra("highTemp")
+         lowTemp= intent.getStringExtra("lowTemp")
+         description=intent.getStringExtra("description")
 
         var image = findViewById<ImageView>(R.id.image)
         Picasso.get().load(icon).resize(500,500).into(image)
@@ -37,5 +49,30 @@ class cs492weather : AppCompatActivity() {
         descriptionA.text = description
         datetimeA.text = datetime
         cloudA.text = cloud
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.share ->{
+                Log.d("blue","SHARE")
+                var msg = """
+                    $datetime has $rain of rain with temps between$lowTemp and $highTemp with a cloud cover of $cloud and winds of $wind
+                    $description
+                """.trimIndent()
+                val sendIntent: Intent = Intent().apply{
+                    this.action = Intent.ACTION_SEND
+                    this.putExtra(Intent.EXTRA_TEXT, msg)
+                    type="text/plain"
+                }
+                val shareIntent = Intent.createChooser(sendIntent,null)
+                startActivity(shareIntent)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }
