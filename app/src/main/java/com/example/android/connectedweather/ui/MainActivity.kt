@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var errorState: TextView
     lateinit var loading: CircularProgressIndicator
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("blue", "onCreate()")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         errorState=findViewById(R.id.tv_search_error)
@@ -58,7 +59,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+    override fun onResume() {
+        Log.d("blue", "onResume()")
+        super.onResume()
+    }
 
+    override fun onPause() {
+        Log.d("blue", "onPause()")
+        super.onPause()
+    }
     fun activityHandler(item: forecast_all){
         val intent = Intent(this, cs492weather::class.java)
         intent.putExtra("datetime",item.datetime)
