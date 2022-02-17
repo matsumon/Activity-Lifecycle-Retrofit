@@ -1,67 +1,55 @@
-# Assignment 2
-**Due by 11:59pm on Monday, 2/7/2022** <br />
-**Demo due by 11:59pm on Monday, 2/21/2022**
+# Assignment 3
+**Due by 11:59pm on Monday, 2/21/2022** <br />
+**Demo due by 11:59pm on Monday, 3/7/2022**
 
-In this assignment, we'll continue working on our weather app, hooking it up to an HTTP API to fetch forecast data over the internet and using Intents to start new activities.  The parts of the assignment are outlined below.  Below is a screen capture roughly depicting some of the behavior you'll implement for this assignment.  Your solution doesn't have to match all of the styling, icons, layout, etc. depicted in the screen capture below, but the basic functionality of your app should be the same (i.e. displaying a list of forecast data fetched from an HTTP API, opening a new activity to display the details when a forecast in the list is clicked, and adding support for sharing and mapping actions via implicit intents).
+In this assignment, we'll adapt our weather app to gracefully deal with transitions in the activity lifecycle by implementing the `ViewModel` architecture.  You'll also add some basic user preferences to the app.  There are a few different tasks associated with this assignment, described below.  This repository provides you with some starter code that implements the connected weather app from assignment 2.
 
-![Screen capture of working assignment 2 solution](screencap.gif)
+**NOTE: make sure to add your own API key as described in [`MainActivity.kt`](app/src/main/java/com/example/android/lifecycleweather/ui/MainActivity.kt#L28-L44) to make the app work.**
 
-## 1. Hook your app up to the OpenWeather API
+## 1. Implement the ViewModel architecture and use Retrofit
 
-This repository provides you with some starter code that displays hard-coded dummy forecast data in a `RecyclerView`-based list (i.e. a solution to assignment 1).  Your first task for this assignment is to use Volley to fetch forecast data from the OpenWeather API and to display that data in the `RecyclerView` instead of the dummy data.  You can find more info about the OpenWeather API here: https://openweathermap.org/api.  Here are some steps you can follow to get everything working for this part of the assignment:
+One thing you might notice is that when you do things like rotate your device when viewing the main activity, the activity is recreated, resulting in a new network call to fetch the same weather forecast data.  You can know this is happening because the loading indicator will be displayed, indicating that the network call to fetch forecast data from the OpenWeather API is being re-executed.  This happens because the network call is initiated in the `onCreate()` function in the main activity class.
 
-  1. To be able to use the OpenWeather API, you'll first need to sign up for an OpenWeather API key here: http://openweathermap.org/appid.  Without this API key, you won't be able to make calls to the API.
+Your first task in this assignment is to fix this problem by moving the main activity's data management behind a `ViewModel` to make our activity better cope with lifecycle transitions.  Doing this will involve a few different sub-tasks:
 
-  2. Construct the URL you'll use to query OpenWeather's [5-day forecast API](https://openweathermap.org/forecast5).  For this assignment, you'll query [by city name](https://openweathermap.org/forecast5#name5).  You can either hard-code your URL to contain a city (e.g. "Corvallis,OR,US"), or you can set things up so that the city can be stored in a parameter value that's plugged into the URL.  Don't forget include your API key as a query string parameter in the URL you construct.  The URL should also be set up to request JSON data from the API.  You may also want to set other API query parameters in your URL, as well, such as `units`, which controls the units of temperature, etc. returned by the API.  The documentation for the 5-day forecast API describes all the API query parameters you can set in the URL.
+  * Set up a Retrofit service interface that you'll use to communicate with the OpenWeather API.  Your service interface will only need one method to call the OpenWeather 5 day/3 hour forecast API.  Make sure to set this method up with appropriate arguments to instantiate all the fields you'll need to put into the URL to make the API call (e.g. city name, units, API key).
 
-  3. Set up a Volley request that fetches forecast data from the OpenWeather API using a URL generated above.  You should set up success and error callbacks for your request that do the following things:
-      * Display a `ProgressBar` while data is being fetched and hide the progress bar when fetching is complete.
-      * Display an error message if you were unable to successfully fetch data for some reason.
-      * If data is successfully fetched, display it in the main activity's `RecyclerView`-based list (more on this in the next couple items).
+  * Implement a Repository class to perform the data operations associated with communicating with the OpenWeather API.  This Repository class will use your Retrofit service to make API calls.  Remember that all network calls must be executed in a background thread, not the main UI thread.  The Repository class should use elements of the Kotlin coroutines framework to make sure this happens.
 
-  4. Use [Moshi](https://github.com/square/moshi/) to parse the JSON data returned by the OpenWeather API.  At a minimum, your app should extract (at a minimum) the following data for each entry in the returned JSON data:
-      * The date/time.
-      * The low temperature.
-      * The high temperature.
-      * The probability of precipitation.
-      * The short textual description of the weather.
+  * Implement a `ViewModel` class to serve as the intermediary between the Repository class and the UI.  This class should contain methods for triggering a new data load, and it should make the fetched forecast data available to the UI.
 
-      The documentation for the 5-day forecast API [describes all the fields and the structure of the JSON response](https://openweathermap.org/forecast5#JSON).  Note that the structure of the JSON response is somewhat complex, and the fields containing the data listed above are at different levels and in different locations in the JSON response.  To be able to successfully parse out those fields, you'll likely need to set up a hierarchy of nested Kotlin classes to use in conjunction with Moshi.  It may be helpful to implement a [custom Moshi type adapter](https://github.com/square/moshi/#custom-type-adapters) to give you a class that's a little easier to work with.
+  * Set up the UI (i.e. the main activity class) to observe changes to the forecast data held within the `ViewModel` and to update the state of the UI as appropriate based on changes to that data.  Importantly, this should be done in such a way that the loading indicator and error message behave as currently implemented in the UI.
 
-  5. Send your parsed forecast data into the `ForecastAdapter`, so it is displayed in the main activity's `RecyclerView`-based list.  Depending on how you set up your parsing, you may need to make modifications to the `RecyclerView` framework to correctly display the new data.  For example, you may need to modify the layout representing one item in the `RecyclerView` list.  Other changes may be needed as well.
+As a result of these changes, you should see your app fetch results from the OpenWeather API only one time through typical usage of the app, including through rotations of the phone and navigation around the app.
 
-  6. Trigger an API request to fetch forecast data from your main activity class's `onCreate()` method, so forecast data is fetched the app starts.  Don't forget to set up the correct permissions to be able to make network calls from your app.
+## 2. Add some basic user preferences to the app
 
-## 2. Use an Intent to start a new activity
+Your second task in this assignment is to create a new activity named `SettingsActivity` that implements a user preferences screen using a `PreferenceFragment`.  Add a "settings" action button to the app bar in the main activity to launch the preferences screen.
 
-Once you have your app hooked up to the OpenWeather API, change the app's behavior so that clicks on items in the `RecyclerView` list no longer display a Snackbar but instead navigate to a new activity that allows the user to view a "detailed" view of that forecast item.  To do this, you'll have to accomplish the following things:
+The preferences screen should allow the user to set the following preferences:
 
-  1. Create a new activity to represent the detailed view of the forecast item.  The layout for this activity should have elements to display all of the data fields associated with the forecast item.  The new activity should be an "empty" activity, i.e. a subclass of `AppCompatActivity` like our main activity.  Don't forget to make sure the new activity is correctly listed in `AndroidManifest.xml`.
+  * **Forecast units** - The user should be allowed to select between "Imperial", "Metric", and "Kelvin" temperature units.  The currently-selected value should be displayed as the summary for the preference.  See the OpenWeather API documentation here for more info on how this preference value will be used to formulate API requests: https://openweathermap.org/forecast5#data.
 
-  2. Once your new activity is created modify the click listener for the individual items in the `RecyclerView`-based list to create a new explicit `Intent` that launches the new activity you just created.  Add the data object representing the clicked forecast item into the `Intent` as an extra so the new activity will have access to the data it needs to display the "detailed" view of that forecast item.
+  * **Forecast location** - The user should be allowed to enter an arbitrary location for which to fetch a forecast.  The currently-set value should be set as the summary for the preference.  You can specify any default location you'd like.  See the OpenWeather API documentation here for more info on how this preference value will be used to formulate API requests: https://openweathermap.org/forecast5#name5.
 
-  3. Make sure your new activity is set up to grab the forecast data out of the `Intent` that launched it and to display that data.
-
-## 3. Add some implicit intents
-
-Finally, add the following features using implicit intents:
-
-  1. Add an action to the action bar of the main activity that allows the user to see in a map the location for which the forecast is displayed.
-
-  2. Add an action to the action bar of the "detailed" forecast activity that allows the user to share the "detailed" forecast text.  Your action should launch the Android Sharesheet to allow the user to select an app with which to share the forecast text.
+The settings of these preferences should affect the URL used to query the OpenWeather API.  The app should be hooked up so that any change to the preferences results in the OpenWeather API being re-queried and the newly-fetched forecast data being displayed.  Importantly, there are a couple places in the UI where the "F" is hard-coded to indicate a Fahrenheit temperature.  Make sure to update these locations to display the appropriate unit for the current setting ("F" for Fahrenheit, "C" for Celsius, and "K" for Kelvin).
 
 ## Submission
 
-As usual, we'll be using GitHub Classroom for this assignment, and you will submit your assignment via GitHub.  Make sure your completed files are committed and pushed by the assignment's deadline to the master branch of the GitHub repo that was created for you by GitHub Classroom.  A good way to check whether your files are safely submitted is to look at the master branch your assignment repo on the github.com website (i.e. https://github.com/osu-cs492-w22/assignment-2-YourGitHubUsername/). If your changes show up there, you can consider your files submitted.
+As usual, we'll be using GitHub Classroom for this assignment, and you will submit your assignment via GitHub.  Make sure your completed files are committed and pushed by the assignment's deadline to the master branch of the GitHub repo that was created for you by GitHub Classroom.  A good way to check whether your files are safely submitted is to look at the master branch your assignment repo on the github.com website (i.e. https://github.com/osu-cs492-w22/assignment-3-YourGitHubUsername/). If your changes show up there, you can consider your files submitted.
 
 ## Grading criteria
 
-This assignment is worth 100 total points, broken down as follows:
+This assignment is worth 100 points, broken down as follows:
 
-  * 50 points: The app fetches and displays data from the OpenWeather API in the main activity's `RecyclerView`-based list
+  * 65 points: Implements `ViewModel` architecture
+    * 10 points: implements Retrofit service interface to represent communication with the OpenWeather API
+    * 20 points: implements Repository class to perform data fetching and store data
+    * 10 points: implements `ViewModel` class to interface between UI and Repository
+    * 15 points: observes `ViewModel` data in UI and updates the UI state appropriately (including loading indicator and error message) as data changes
+    * 10 points: correctly uses Kotlin coroutines to execute network calls in a background thread, following best practices as discussed in lecture
 
-  * 30 points: The app uses an explicit intent to start a "detailed" forecast activity whenever the user clicks on an item in the forecast list
-
-  * 20 points: The app uses implicit intents to launch other activities:
-      * 10 points: The app includes an action in the main activity's action bar to allow the user to see the forecast location in a map
-      * 10 points: The app includes an action in the "detailed" forecast activity's action bar to allow the user to share the text of the "detailed" forecast
+  * 35 points: Implements user settings activity
+    * 15 points: implements a preference fragment to allow the user to select temperature units and forecast location
+    * 5 points: summaries of both preferences reflect the current values set for those preferences
+    * 15 points: changing preference values results in new data being fetched/displayed and correct updates being made to the UI, as described above
