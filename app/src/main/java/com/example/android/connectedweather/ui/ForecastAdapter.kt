@@ -1,4 +1,4 @@
-package com.example.android.connectedweather
+package com.example.android.connectedweather.ui
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,15 +8,16 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.connectedweather.data.forecast
 import com.example.android.connectedweather.data.forecast_all
-import com.google.android.material.snackbar.Snackbar
 import java.util.*
 import android.util.Log
+import com.example.android.connectedweather.R
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 
 class ForecastAdapter(var forecastPeriods: List<forecast?>, var activityHandler: (forecast_all) -> Unit) :
     RecyclerView.Adapter<ForecastAdapter.ViewHolder>() {
-    public fun updateForecast(newList: List<forecast?>){
+    public fun updateForecast(newList: List<forecast?>?){
+        Log.d("blue","updating")
         forecastPeriods = newList ?: listOf()
         notifyDataSetChanged()
     }
@@ -49,7 +50,7 @@ class ForecastAdapter(var forecastPeriods: List<forecast?>, var activityHandler:
             val netDate = Date(s.toLong() * 1000)
             val monthDay = sdf.format(netDate)
             val Time = time.format(netDate)
-            var orange:dateObject = dateObject(
+            var orange: dateObject = dateObject(
                 monthDay=monthDay,
                 time=Time
             )
@@ -66,7 +67,7 @@ class ForecastAdapter(var forecastPeriods: List<forecast?>, var activityHandler:
                 rain = rain * 100
                 var rainText = rain.toString() + "%"
                 var cloudText =  "${currentForecastPeriod.clouds.all}" + "%"
-                Log.d("blue",cloudText)
+//                Log.d("blue",cloudText)
                 var temp_forecast = forecast_all(
                     datetime= "${time?.monthDay}, ${time?.time}",
                     wind= "\uD83D\uDCA8${currentForecastPeriod.wind.speed}mph⛛",
@@ -92,7 +93,7 @@ class ForecastAdapter(var forecastPeriods: List<forecast?>, var activityHandler:
             highTempTV.text = "${forecastPeriod.main.highTemp}°F"
             lowTempTV.text = "${forecastPeriod.main.lowTemp} °F"
 
-            Log.d("blue","HERE $forecastPeriod")
+//            Log.d("blue","HERE $forecastPeriod")
             var rain = forecastPeriod.rain
             rain = rain * 100
             popTV.text = rain.toString() + "%"
@@ -100,8 +101,8 @@ class ForecastAdapter(var forecastPeriods: List<forecast?>, var activityHandler:
 //            Picasso.get().setLoggingEnabled(true)
             Picasso.get().load("http://openweathermap.org/img/wn/${forecastPeriod.weather[0].icon}@2x.png").into(image)
 
-            Log.d("orange","MONTHDAY ${time?.monthDay}")
-            Log.d("orange","TIME ${time?.time}")
+//            Log.d("orange","MONTHDAY ${time?.monthDay}")
+//            Log.d("orange","TIME ${time?.time}")
         }
 //        Copied portion of the code from https://stackoverflow.com/questions/47250263/kotlin-convert-timestamp-to-datetime
 //         fun getDateTime(s: String): dateObject? {

@@ -1,5 +1,4 @@
 package com.example.android.connectedweather.data
-import com.example.android.connectedweather.MainActivity
 import com.squareup.moshi.Json
 
 data class forecast(

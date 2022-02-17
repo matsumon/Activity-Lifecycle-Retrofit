@@ -13,11 +13,12 @@
         android:theme="@style/Theme.CS492Weather"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".cs492weather"
+            android:name=".ui.cs492weather"
             android:exported="false"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".ui.MainActivity"/>
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
+            android:launchMode="singleTop"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

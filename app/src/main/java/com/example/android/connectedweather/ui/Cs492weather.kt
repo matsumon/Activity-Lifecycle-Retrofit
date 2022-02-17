@@ -1,15 +1,14 @@
-package com.example.android.connectedweather
+package com.example.android.connectedweather.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import com.squareup.picasso.Picasso
-import android.net.Uri
 import android.content.Intent
+import com.example.android.connectedweather.R
 
 class cs492weather : AppCompatActivity() {
     var wind: String? =""
@@ -51,14 +50,14 @@ class cs492weather : AppCompatActivity() {
         cloudA.text = cloud
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu, menu)
-        return true
-    }
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        menuInflater.inflate(R.menu.menu, menu)
+//        return true
+//    }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.share ->{
-                Log.d("blue","SHARE")
+//                Log.d("blue","SHARE")
                 var msg = """
                     $datetime has $rain of rain with temps between$lowTemp and $highTemp with a cloud cover of $cloud and winds of $wind
                     $description
