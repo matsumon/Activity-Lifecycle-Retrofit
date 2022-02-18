@@ -52,8 +52,8 @@ class cs492weather : AppCompatActivity() {
         city.text=resultLocation
         windA.text = wind
         rainA.text = rain
-        highTempA.text = highTemp
-        lowTempA.text = lowTemp
+        highTempA.text = lowTemp
+        lowTempA.text = highTemp
         descriptionA.text = description
         datetimeA.text = datetime
         cloudA.text = cloud

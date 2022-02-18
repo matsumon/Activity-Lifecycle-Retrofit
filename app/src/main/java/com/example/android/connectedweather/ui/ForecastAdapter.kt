@@ -39,8 +39,8 @@ class ForecastAdapter(var forecastPeriods: List<forecast?>, var activityHandler:
     class ViewHolder(public var view: View, public var activityHandler: (forecast_all)-> Unit) : RecyclerView.ViewHolder(view) {
         private val monthTV: TextView = view.findViewById(R.id.tv_month)
         private val dayTV: TextView = view.findViewById(R.id.tv_day)
-        private val highTempTV: TextView = view.findViewById(R.id.tv_high_temp)
-        private val lowTempTV: TextView = view.findViewById(R.id.tv_low_temp)
+        private val highTempTV: TextView = view.findViewById(R.id.tv_low_temp)
+        private val lowTempTV: TextView = view.findViewById(R.id.tv_high_temp)
         private val shortDescTV: String =""
         private val popTV: TextView = view.findViewById(R.id.tv_pop)
         private val image: ImageView = view.findViewById(R.id.image)
@@ -92,8 +92,8 @@ class ForecastAdapter(var forecastPeriods: List<forecast?>, var activityHandler:
                     cloud= cloudText,
                     rain= rainText,
                     image= "http://openweathermap.org/img/wn/${currentForecastPeriod.weather[0].icon}@2x.png",
-                    highTemp= "\uD83E\uDD75${currentForecastPeriod.main.highTemp}°${getTempUnits()}",
-                    lowTemp= "\uD83E\uDD76${currentForecastPeriod.main.lowTemp}°${getTempUnits()}",
+                    highTemp= "\uD83E\uDD76${currentForecastPeriod.main.highTemp}°${getTempUnits()}",
+                    lowTemp= "\uD83E\uDD75${currentForecastPeriod.main.lowTemp}°${getTempUnits()}",
                     description= currentForecastPeriod.weather[0].description
                 )
                 activityHandler(temp_forecast)
