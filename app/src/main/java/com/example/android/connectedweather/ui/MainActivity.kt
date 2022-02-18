@@ -25,7 +25,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var forecastListRV: RecyclerView
     private val viewModel: WeatherViewModel by viewModels()
     private val forecastAdapter = ForecastAdapter(forecastDataItems,::activityHandler)
-
+    private var location: String? = null
+    private var temp_units: String? = null
     lateinit var errorState: TextView
     lateinit var loading: CircularProgressIndicator
 
@@ -40,9 +41,9 @@ class MainActivity : AppCompatActivity() {
         forecastListRV.layoutManager = LinearLayoutManager(this)
         forecastListRV.adapter = forecastAdapter
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
-    
-        val location = sharedPrefs.getString(getString(R.string.location),"Corvallis,OR,US")
-        val temp_units = sharedPrefs.getString(getString(R.string.temperature_units),"metric")
+
+        location = sharedPrefs.getString(getString(R.string.location),"Corvallis,OR,US")
+        temp_units = sharedPrefs.getString(getString(R.string.temperature_units),"metric")
 
         viewModel.loadForecastResults(location,temp_units)
         viewModel.forecastResults.observe(this) { forecastResults ->
@@ -72,6 +73,16 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         Log.d("blue", "onResume()")
         super.onResume()
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
+        var new_location = sharedPrefs.getString(getString(R.string.location),"Corvallis,OR,US")
+        var new_temp_units = sharedPrefs.getString(getString(R.string.temperature_units),"metric")
+            Log.d("blue","$location, $new_location, $temp_units, $new_temp_units")
+        if(new_location != location || new_temp_units != temp_units){
+            Log.d("blue","here in function")
+            location =  new_location
+            temp_units = new_temp_units
+            viewModel.loadForecastResults(location,temp_units)
+        }
     }
 
     override fun onPause() {
