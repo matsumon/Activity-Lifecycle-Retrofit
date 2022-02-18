@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.squareup.picasso.Picasso
 import android.content.Intent
 import android.view.Menu
+import androidx.preference.PreferenceManager
 import com.example.android.connectedweather.R
 
 class cs492weather : AppCompatActivity() {
@@ -42,6 +43,10 @@ class cs492weather : AppCompatActivity() {
         var lowTempA = findViewById<TextView>(R.id.low_temp)
         var descriptionA = findViewById<TextView>(R.id.description)
         var datetimeA = findViewById<TextView>(R.id.datetime)
+        var city = findViewById<TextView>(R.id.city)
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
+        var location = sharedPrefs.getString(getString(R.string.location),"Corvallis")
+        city.text=location
         windA.text = wind
         rainA.text = rain
         highTempA.text = highTemp

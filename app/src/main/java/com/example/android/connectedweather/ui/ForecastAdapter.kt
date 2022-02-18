@@ -1,5 +1,6 @@
 package com.example.android.connectedweather.ui
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +11,14 @@ import com.example.android.connectedweather.data.forecast
 import com.example.android.connectedweather.data.forecast_all
 import java.util.*
 import android.util.Log
+import androidx.preference.PreferenceManager
 import com.example.android.connectedweather.R
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 
 class ForecastAdapter(var forecastPeriods: List<forecast?>, var activityHandler: (forecast_all) -> Unit) :
     RecyclerView.Adapter<ForecastAdapter.ViewHolder>() {
+
     public fun updateForecast(newList: List<forecast?>?){
         Log.d("blue","updating")
         forecastPeriods = newList ?: listOf()
@@ -33,7 +36,7 @@ class ForecastAdapter(var forecastPeriods: List<forecast?>, var activityHandler:
         holder.bind(this.forecastPeriods[position])
     }
 
-    class ViewHolder(view: View, public var activityHandler: (forecast_all)-> Unit) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(public var view: View, public var activityHandler: (forecast_all)-> Unit) : RecyclerView.ViewHolder(view) {
         private val monthTV: TextView = view.findViewById(R.id.tv_month)
         private val dayTV: TextView = view.findViewById(R.id.tv_day)
         private val highTempTV: TextView = view.findViewById(R.id.tv_high_temp)
@@ -42,7 +45,22 @@ class ForecastAdapter(var forecastPeriods: List<forecast?>, var activityHandler:
         private val popTV: TextView = view.findViewById(R.id.tv_pop)
         private val image: ImageView = view.findViewById(R.id.image)
         private lateinit var currentForecastPeriod: forecast
+        fun getTempUnits():String {
 
+            val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(view.getContext())
+            var temp_units = sharedPrefs.getString("temperature_units","metric")
+            Log.d("blue","HERE IN FUNCTION $temp_units")
+            if(temp_units == "metric"){
+                Log.d("blue","HERE IN FUNCTION 1")
+               return "C"
+            } else if(temp_units == "imperial"){
+                Log.d("blue","HERE IN FUNCTION2")
+                return "F"
+            } else{
+                Log.d("blue","HERE IN FUNCTION3")
+                return "K"
+            }
+        }
         //        Copied portion of the code from https://stackoverflow.com/questions/47250263/kotlin-convert-timestamp-to-datetime
         fun getDateTime(s: String): dateObject? {
             val sdf = SimpleDateFormat("MMM d")
@@ -74,13 +92,14 @@ class ForecastAdapter(var forecastPeriods: List<forecast?>, var activityHandler:
                     cloud= cloudText,
                     rain= rainText,
                     image= "http://openweathermap.org/img/wn/${currentForecastPeriod.weather[0].icon}@2x.png",
-                    highTemp= "\uD83E\uDD75${currentForecastPeriod.main.highTemp}°F",
-                    lowTemp= "\uD83E\uDD76${currentForecastPeriod.main.lowTemp}°F",
+                    highTemp= "\uD83E\uDD75${currentForecastPeriod.main.highTemp}°${getTempUnits()}",
+                    lowTemp= "\uD83E\uDD76${currentForecastPeriod.main.lowTemp}°${getTempUnits()}",
                     description= currentForecastPeriod.weather[0].description
                 )
                 activityHandler(temp_forecast)
             }
         }
+
         fun bind(forecastPeriod: forecast?) {
             if (forecastPeriod == null) {
                     return
@@ -90,8 +109,8 @@ class ForecastAdapter(var forecastPeriods: List<forecast?>, var activityHandler:
             val time = getDateTime(forecastPeriod.date.toString())
             monthTV.text = time?.monthDay
             dayTV.text = time?.time
-            highTempTV.text = "${forecastPeriod.main.highTemp}°F"
-            lowTempTV.text = "${forecastPeriod.main.lowTemp} °F"
+            highTempTV.text = "${forecastPeriod.main.highTemp}°${getTempUnits()}"
+            lowTempTV.text = "${forecastPeriod.main.lowTemp} °${getTempUnits()}"
 
 //            Log.d("blue","HERE $forecastPeriod")
             var rain = forecastPeriod.rain
