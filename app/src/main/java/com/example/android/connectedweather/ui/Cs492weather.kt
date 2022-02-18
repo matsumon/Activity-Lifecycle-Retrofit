@@ -46,7 +46,10 @@ class cs492weather : AppCompatActivity() {
         var city = findViewById<TextView>(R.id.city)
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
         var location = sharedPrefs.getString(getString(R.string.location),"Corvallis")
-        city.text=location
+        var resultsLocation = location?.split(",")
+        var resultLocation = resultsLocation?.get(0)
+
+        city.text=resultLocation
         windA.text = wind
         rainA.text = rain
         highTempA.text = highTemp
