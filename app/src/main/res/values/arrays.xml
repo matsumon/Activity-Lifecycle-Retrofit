@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="temp_entries">
+        <item>@string/imperial</item>
+        <item>@string/metric</item>
+        <item>@string/kelvin</item>
+    </string-array>
+
+    <string-array name="temp_values">
+        <item>@string/imperial</item>
+        <item>@string/metric</item>
+        <item>@string/kelvin</item>
+    </string-array>
+</resources>

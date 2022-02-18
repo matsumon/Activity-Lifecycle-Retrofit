@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--copied from Rob Hess: https://github.com/osu-cs492-w22/GitHubSearchWithSettings/blob/main/app/src/main/res/xml/settings.xml-->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="Settings">
+        <ListPreference
+            android:title="Forecast units"
+            android:key="@string/temperature_units"
+            android:entries="@array/temp_entries"
+            android:entryValues="@array/temp_values"
+            android:defaultValue="@string/metric"
+            android:dialogTitle="Choose temperature units"
+            app:useSimpleSummaryProvider="true" />
+
+<!--        <MultiSelectListPreference-->
+<!--            android:title="@string/pref_language_title"-->
+<!--            android:key="@string/pref_language_key"-->
+<!--            android:entries="@array/pref_language_entries"-->
+<!--            android:entryValues="@array/pref_language_values"-->
+<!--            android:dialogTitle="@string/pref_language_title" />-->
+
+        <EditTextPreference
+            android:title="Forecast Location"
+            android:key="@string/location"
+            android:defaultValue="Corvallis,OR,US"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

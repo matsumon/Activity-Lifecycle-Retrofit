@@ -11,11 +11,14 @@ class WeatherDataRequest(
     val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 )
 {
-    suspend fun loadForecast(query: String): Result<overview> =
+    suspend fun loadForecast(query: String?,temp_units: String?): Result<overview> =
         withContext(ioDispatcher) {
 //            Log.d("Blue","HERE IN DATA")
             try {
-                val results = service.getForecast(query,"Imperial","97a47cb2c6f46038cde0645cbf6d4224")
+                var new_query = query ?: "Corvallis"
+                var new_temp_units = temp_units ?: "metric"
+                val results = service.getForecast(new_query,new_temp_units,"97a47cb2c6f46038cde0645cbf6d4224")
+//                val results = service.getForecast(new_query,new_temp_units,"97a47cb2c6f46038cde0645cbf6d4224")
 //                Log.d("Blue","In Data Request, $results")
                 Result.success(results)
             } catch (e: Exception) {

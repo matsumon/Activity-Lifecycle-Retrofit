@@ -23,11 +23,11 @@ class WeatherViewModel : ViewModel() {
     private val _loadingStatus = MutableLiveData(LoadingStatus.SUCCESS)
     val loadingStatus: LiveData<LoadingStatus> = _loadingStatus
 
-    fun loadForecastResults(query: String) {
+    fun loadForecastResults(query: String?,temp_units: String?) {
         viewModelScope.launch {
             Log.d("blue","query results")
             _loadingStatus.value = LoadingStatus.LOADING
-            val result = weatherData.loadForecast(query)
+            val result = weatherData.loadForecast(query,temp_units)
             _forecastResults.value = result.getOrNull()
             _loadingStatus.value = when (result.isSuccess) {
                 true -> LoadingStatus.SUCCESS

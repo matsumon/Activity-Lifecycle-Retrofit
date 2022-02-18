@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.squareup.picasso.Picasso
 import android.content.Intent
+import android.view.Menu
 import com.example.android.connectedweather.R
 
 class cs492weather : AppCompatActivity() {
@@ -50,10 +51,10 @@ class cs492weather : AppCompatActivity() {
         cloudA.text = cloud
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        menuInflater.inflate(R.menu.menu, menu)
-//        return true
-//    }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.share ->{

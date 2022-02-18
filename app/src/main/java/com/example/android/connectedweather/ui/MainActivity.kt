@@ -10,11 +10,14 @@ import com.example.android.connectedweather.data.forecast
 import com.example.android.connectedweather.data.forecast_all
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.example.android.connectedweather.R
 import androidx.activity.viewModels
+import androidx.preference.PreferenceManager
 import com.example.android.connectedweather.data.LoadingStatus
 
 class MainActivity : AppCompatActivity() {
@@ -25,6 +28,8 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var errorState: TextView
     lateinit var loading: CircularProgressIndicator
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d("blue", "onCreate()")
         super.onCreate(savedInstanceState)
@@ -34,7 +39,12 @@ class MainActivity : AppCompatActivity() {
         forecastListRV = findViewById<RecyclerView>(R.id.rv_forecast_list)
         forecastListRV.layoutManager = LinearLayoutManager(this)
         forecastListRV.adapter = forecastAdapter
-        viewModel.loadForecastResults("Corvallis,OR,US")
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
+    
+        val location = sharedPrefs.getString(getString(R.string.location),"Corvallis,OR,US")
+        val temp_units = sharedPrefs.getString(getString(R.string.temperature_units),"metric")
+
+        viewModel.loadForecastResults(location,temp_units)
         viewModel.forecastResults.observe(this) { forecastResults ->
             Log.d("Blue","OBSERVER TRIGGERED")
             forecastAdapter.updateForecast(forecastResults?.list)
@@ -81,16 +91,22 @@ class MainActivity : AppCompatActivity() {
 
         startActivity(intent)
     }
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        menuInflater.inflate(R.menu.main_menu, menu)
-//        return true
-//    }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.map ->{
 //                Log.d("blue","MAP")
                 val uri = Uri.parse("geo:44.5646,-123.2620")
                 val intent: Intent = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(intent)
+                true
+            }
+//            copied from rob hess
+            R.id.settings -> {
+                val intent = Intent(this, SettingsActivity::class.java)
                 startActivity(intent)
                 true
             }
